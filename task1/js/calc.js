@@ -15,7 +15,7 @@ function division(a, b) {
 }
 
 function integerDivision(a, b) {
-  return Math.floor(a / b);
+  return parseInt(a / b, 10);
 }
 
 function doTest(type1, type2) {
