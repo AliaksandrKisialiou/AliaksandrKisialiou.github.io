@@ -60,6 +60,7 @@ article address {
 }
 
 footer {
+    text-align: right;
     clear: both;
     height: 40px;
     padding: 10px;

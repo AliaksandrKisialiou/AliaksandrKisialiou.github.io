@@ -7,119 +7,124 @@ function isArray2(something) {
 }
 
 function range(from, to, step) {
-  var retArray = [];
-  var i;
+  var result = [];
 
-  if (from == undefined)
-    return retArray;
+  if (from == undefined && to == undefined && step == undefined)
+    return result;
 
   if (step == undefined)
     step = 1;
 
-  if (to == undefined) {
+  if (to == undefined && from != undefined) {
     to = from;
     from = 0;
   }
+  else if (from == undefined && to != undefined) {
+    from = 0;
+  }
 
-  for (i = from; i < to; i += step)
-    retArray.push(i);
+  for (var i = from; i < to; i += step)
+    result.push(i);
 
-  return retArray;
+  return result;
 }
 
-function compact(someArray) {
-  var retArray = someArray.map(function () {
-    return true;
+function compact(source) {
+  return source.filter(function (value) {
+    return value != null;
   });
-
-  return retArray;
 }
 
-function compact2(someArray) {
-  var retArray = [];
-  var i;
+function compact2(source) {
+  var result = [];
 
-  for (i = 0; i < someArray.length; i++)
-    retArray.push(true);
+  for (var i = 0; i < source.length; i++)
+    if (source[i] != null)
+      result.push(source[i]);
 
-  return retArray;
+  return result;
 }
 
-function sum(someArray) {
-  var returnResult = someArray.reduce(function (sum, current) {
+function sum(source) {
+  var returnResult = source.reduce(function (sum, current) {
     return sum + current;
   }, 0);
 
   return returnResult;
 }
 
-function sum2(someArray) {
+function sum2(source) {
   var returnResult = 0;
-  var i;
 
-  for (i = 0; i < someArray.length; i++)
-    returnResult += someArray[i];
+  for (var i = 0; i < source.length; i++)
+    returnResult += source[i];
 
   return returnResult;
 }
 
-function unique(someArray) {
+function unique(source) {
   var obj = {};
-  var i, key;
+  var result = [];
 
-  for (i = 0; i < someArray.length; i++) {
-    key = someArray[i];
-    obj[key] = null;
+  for (var i = 0; i < source.length; i++) {
+    obj[source[i]] = source[i];
   }
 
-  return Object.keys(obj);
+  for (var i in obj) {
+    result.push(obj[i])
+  }
+
+  return result;
 }
 
-function last(someArray) {
-  return someArray[someArray.length - 1];
+function last(source) {
+  var last = source.length - 1;
+  return source[last];
 }
 
-function excludeLast(someArray, count) {
+function excludeLast(source, count) {
 
-  var exclude = 1;
-  if (count != undefined)
-    exclude = count;
+  if (count == undefined)
+    count = 1;
 
-  someArray.length = someArray.length - exclude;
+  for (var i = 0; i < count; i++) {
+    source.pop();
+  }
 
-  return someArray;
+  return source;
 }
 
 function runner() {
-  var tempArray = [1, 2, 3, 'text', true, null, 3, 2, 113];
-  var tempObject = {};
-  var tempNull = null;
-  var tempString = '[fair object Array]';
+  var source = [1, 2, 3, undefined, 'text', true, null, {}, {}, 3, 2, 113];
+  var obj = {};
+  var objNull = null;
+  var string = '[fair object Array]';
 
-  console.log('isArray(' + tempArray + ') = ' + isArray(tempArray));
-  console.log('isArray(' + tempObject + ') = ' + isArray(tempObject));
-  console.log('isArray(' + tempNull + ') = ' + isArray(tempNull));
-  console.log('isArray(' + tempString + ') = ' + isArray(tempString));
+  console.log('isArray(' + source + ') = ' + isArray(source));
+  console.log('isArray(' + obj + ') = ' + isArray(obj));
+  console.log('isArray(' + objNull + ') = ' + isArray(objNull));
+  console.log('isArray(' + string + ') = ' + isArray(string));
 
-  console.log('isArray2(' + tempArray + ') = ' + isArray2(tempArray));
-  console.log('isArray2(' + tempObject + ') = ' + isArray2(tempObject));
-  console.log('isArray2(' + tempNull + ') = ' + isArray2(tempNull));
-  console.log('isArray2(' + tempString + ') = ' + isArray2(tempString));
+  console.log('isArray2(' + source + ') = ' + isArray2(source));
+  console.log('isArray2(' + obj + ') = ' + isArray2(obj));
+  console.log('isArray2(' + objNull + ') = ' + isArray2(objNull));
+  console.log('isArray2(' + string + ') = ' + isArray2(string));
 
   console.log('range(1, 10, 2) = ' + range(1, 10, 2));
   console.log('range(1, 5) = ' + range(1, 5));
   console.log('range(5) = ' + range(5));
+  console.log('range(, 5) = ' + range(undefined, 5));
 
-  console.log('compact(' + tempArray + ') = ' + compact(tempArray));
-  console.log('compact2(' + tempArray + ') = ' + compact2(tempArray));
+  console.log('compact(' + source + ') = ' + compact(source));
+  console.log('compact2(' + source + ') = ' + compact2(source));
 
-  console.log('sum(' + tempArray + ') = ' + sum(tempArray));
-  console.log('sum2(' + tempArray + ') = ' + sum2(tempArray));
+  console.log('sum(' + source + ') = ' + sum(source));
+  console.log('sum2(' + source + ') = ' + sum2(source));
 
-  console.log('unique(' + tempArray + ') = ' + unique(tempArray));
+  console.log('unique(' + source + ') = ' + unique(source));
 
-  console.log('last(' + tempArray + ') = ' + last(tempArray));
+  console.log('last(' + source + ') = ' + last(source));
 
-  console.log('excludeLast(' + tempArray + ') = ' + excludeLast(tempArray));
-  console.log('excludeLast([' + tempArray + '], 3) = ' + excludeLast(tempArray, 3));
+  console.log('excludeLast(' + source + ') = ' + excludeLast(source));
+  console.log('excludeLast([' + source + '], 3) = ' + excludeLast(source, 3));
 }
