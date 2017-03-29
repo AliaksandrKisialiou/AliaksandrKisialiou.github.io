@@ -12,8 +12,10 @@ function range(from, to, step) {
   if (from == undefined && to == undefined && step == undefined)
     return result;
 
-  if (step == undefined)
-    step = 1;
+  step = step || 1;
+
+  if (step < 0 && from < step)
+    return result;
 
   if (to == undefined && from != undefined) {
     to = from;
@@ -23,15 +25,17 @@ function range(from, to, step) {
     from = 0;
   }
 
-  for (var i = from; i < to; i += step)
-    result.push(i);
+  var countElements = parseInt((to - from) / step);
+
+  for (var i = 0; i <= countElements; i++)
+    result.push(from + i * step);
 
   return result;
 }
 
 function compact(source) {
   return source.filter(function (value) {
-    return value != null;
+    return value;
   });
 }
 
@@ -39,27 +43,26 @@ function compact2(source) {
   var result = [];
 
   for (var i = 0; i < source.length; i++)
-    if (source[i] != null)
+    if (source[i])
       result.push(source[i]);
 
   return result;
 }
 
 function sum(source) {
-  var returnResult = source.reduce(function (sum, current) {
+
+  return source.reduce(function (sum, current) {
     return sum + current;
   }, 0);
-
-  return returnResult;
 }
 
 function sum2(source) {
-  var returnResult = 0;
+  var result = 0;
 
   for (var i = 0; i < source.length; i++)
-    returnResult += source[i];
+    result += source[i];
 
-  return returnResult;
+  return result;
 }
 
 function unique(source) {
@@ -67,7 +70,11 @@ function unique(source) {
   var result = [];
 
   for (var i = 0; i < source.length; i++) {
-    obj[source[i]] = source[i];
+    if (source[i] == '[object Object]') {
+      obj[JSON.stringify(source[i])] = source[i];
+    }
+    else
+      obj[source[i]] = source[i];
   }
 
   for (var i in obj) {
@@ -78,24 +85,17 @@ function unique(source) {
 }
 
 function last(source) {
-  var last = source.length - 1;
-  return source[last];
+  return source[source.length - 1];
 }
 
 function excludeLast(source, count) {
 
-  if (count == undefined)
-    count = 1;
-
-  for (var i = 0; i < count; i++) {
-    source.pop();
-  }
-
-  return source;
+  count = count || 1;
+  return source.slice(0, source.length - count);
 }
 
 function runner() {
-  var source = [1, 2, 3, undefined, 'text', true, null, {}, {}, 3, 2, 113];
+  var source = [1, 2, 3, undefined, 0, 'text', true, null, {c: 1}, {}, {}, 3, 2, 113];
   var obj = {};
   var objNull = null;
   var string = '[fair object Array]';
@@ -114,6 +114,8 @@ function runner() {
   console.log('range(1, 5) = ' + range(1, 5));
   console.log('range(5) = ' + range(5));
   console.log('range(, 5) = ' + range(undefined, 5));
+  console.log('range(10, 20, -5) = ' + range(10, 20, -5));
+  console.log('range(20, 10, -5) = ' + range(20, 10, -5));
 
   console.log('compact(' + source + ') = ' + compact(source));
   console.log('compact2(' + source + ') = ' + compact2(source));
