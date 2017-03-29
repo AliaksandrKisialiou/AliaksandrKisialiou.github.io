@@ -69,15 +69,12 @@ function unique(source) {
   var obj = {};
   var result = [];
 
-  for (var i = 0; i < source.length; i++) {
-    if (source[i] == '[object Object]') {
-      obj[JSON.stringify(source[i])] = source[i];
-    }
-    else
-      obj[source[i]] = source[i];
-  }
+  for (var i = 0; i < source.length; i++)
+    source[i] == '[object Object]' ?
+        obj[JSON.stringify(source[i])] = source[i] :
+        obj[source[i]] = source[i];
 
-  for (var i in obj) {
+  for (i in obj) {
     result.push(obj[i])
   }
 
@@ -95,7 +92,8 @@ function excludeLast(source, count) {
 }
 
 function runner() {
-  var source = [1, 2, 3, undefined, 0, 'text', true, null, {c: 1}, {}, {}, 3, 2, 113];
+  var source = [1, 2, 3, undefined, 0, 'text', true, null, {c: 1}, {}, {}, 3,
+    2, 113];
   var obj = {};
   var objNull = null;
   var string = '[fair object Array]';
