@@ -25,9 +25,12 @@ function range(from, to, step) {
     from = 0;
   }
 
-  var countElements = parseInt((to - from) / step);
+  var countElements = Math.ceil((to - from) / step);
 
-  for (var i = 0; i <= countElements; i++)
+  if (countElements < 0)
+    countElements = Math.floor((to - from) / step);
+
+  for (var i = 0; i < countElements; i++)
     result.push(from + i * step);
 
   return result;
@@ -66,17 +69,11 @@ function sum2(source) {
 }
 
 function unique(source) {
-  var obj = {};
   var result = [];
 
   for (var i = 0; i < source.length; i++)
-    source[i] == '[object Object]' ?
-        obj[JSON.stringify(source[i])] = source[i] :
-        obj[source[i]] = source[i];
-
-  for (i in obj) {
-    result.push(obj[i])
-  }
+    if (result.indexOf(source[i]) == -1)
+      result.push(source[i]);
 
   return result;
 }
@@ -87,12 +84,17 @@ function last(source) {
 
 function excludeLast(source, count) {
 
-  count = count || 1;
+  if (count > 0 || count == undefined)
+    count = count || 1;
+  else
+    return source;
+
   return source.slice(0, source.length - count);
 }
 
 function runner() {
-  var source = [1, 2, 3, undefined, 0, 'text', true, null, {c: 1}, {}, {}, 3,
+  var objC = {c: 1};
+  var source = [1, 2, 3, undefined, 0, 'text', true, null, objC, {}, objC, 3,
     2, 113];
   var obj = {};
   var objNull = null;
@@ -114,6 +116,9 @@ function runner() {
   console.log('range(, 5) = ' + range(undefined, 5));
   console.log('range(10, 20, -5) = ' + range(10, 20, -5));
   console.log('range(20, 10, -5) = ' + range(20, 10, -5));
+  console.log('range(10) = ' + range(10));
+  console.log('range(-20, -10) = ' + range(-20, -10));
+  console.log('range(10, 1, -3) = ' + range(10, 1, -3));
 
   console.log('compact(' + source + ') = ' + compact(source));
   console.log('compact2(' + source + ') = ' + compact2(source));
